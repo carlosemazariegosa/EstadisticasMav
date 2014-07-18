@@ -245,7 +245,7 @@ public class EstctaBean implements Serializable {
         JasperPrint print = JasperFillManager.fillReport(jasperReport, new HashMap(), beancollectionDataSource);
         File pdf = File.createTempFile("output.", ".pdf");
         JasperExportManager.exportReportToPdfStream(print, new FileOutputStream(pdf));*/
-        System.out.println("esta es una nueva modificacion");
+        System.out.println("esta es una nueva modificacionxxxxxxxxxxxx");
         
         
     }
