@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="es">
+
+    <h:head>  
+        <title>Facelet Title</title>  
+    </h:head>  
+    <h:body>  
+        <ui:composition template="/templates/plantillaLayout.xhtml">
+            <ui:define name="div_principal">
+                <h:form id ="formAutorizaciones">
+                    <p:panel   id="panelAutorizaciones" toggleable="true" style="width: 98%;padding-bottom: 0" >
+                        <p:growl id="messages" showDetail="true" />
+                        <p:panelGrid>
+                            <p:row>
+                                <p:column>
+                                    <p:selectOneMenu value="#{mntAutorizaciones.semesAno}" required="true" style="width:100px ">
+                                        <f:selectItem itemLabel="12014" itemValue="12014" />
+                                        <f:selectItem itemLabel="22013" itemValue="22013" />
+                                        <f:selectItem itemLabel="12013" itemValue="12013" />
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column >                                  
+                                    <p:inputText value="#{mntAutorizaciones.facultad}" id="facultad" required="true" label="facultad" maxlength="4" size="8" accesskey="anio" requiredMessage="Ingrese la facultad">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                    <p:watermark for="facultad" value="Facultad" />
+                                </p:column> 
+                                <p:column >
+                                    <p:inputText value="#{mntAutorizaciones.anio}" id="anio" required="true" label="anio" maxlength="2" size="4" requiredMessage="Ingrese el Anio">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                    <p:watermark for="anio" value="Anio" />
+                                </p:column>
+                                <p:column style="text-align: left;">
+                                    <p:inputText value="#{mntAutorizaciones.carnet}" id="Carnet" required="true" label="carnet" maxlength="5" size="10" requiredMessage="Ingrese el Carnet">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                    <p:watermark for="Carnet" value="Carnet" />
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton value="Consulta"  id="btnInscrip" update="panelAutorizaciones" actionListener="#{mntAutorizaciones.onDatAlum()}" />
+                                </p:column> 
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid id="gridDat" >
+                            <p:row>
+                                <p:column style="text-align: left">
+                                    <p:outputLabel value="Nombre" />
+                                </p:column> 
+                                <p:column style="text-align:left;width: 100%" >                                 
+                                    <p:outputLabel id="nomAlumn" value="#{mntAutorizaciones.nombre}  " />                                   
+                                    <p:outputLabel id="apeAlumn" value="#{mntAutorizaciones.apellido}" />
+                                </p:column>   
+                            </p:row>
+                        </p:panelGrid>
+                        <p:commandButton id="selectButtonFormProp" update=":formAgregaAut:displayFormAut" oncomplete="PF('DialogFormAut').show()"  icon="ui-icon-search" title="View" value="Agregar" rendered="#{mntAutorizaciones.muestraBoton}" />  
+
+                        <p:dataTable   id="TableAutorizaciones" var="o" value="#{mntAutorizaciones.listAutorizacion}" paginator="false" rows="50" 
+                                       paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} 
+                                       {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="15,30" >
+                            <f:facet name="header">  
+                            </f:facet>
+                            <p:column headerText="Id"  style="text-align:left;">  
+                                <h:outputText value="#{o.id}" />  
+                            </p:column>
+                            <p:column headerText="Nombre"  style="text-align:left;">  
+                                <h:outputText value="#{o.nombre}" />  
+                            </p:column>
+                            <p:column headerText="Fecha Inicio"  style="text-align:left;" >  
+                                <h:outputText value="#{o.fechaIni}" >
+                                    <f:convertDateTime pattern="dd.MM.yyyy " />
+                                </h:outputText>  
+                            </p:column>
+                            <p:column headerText="Fecha Final"  style="text-align:left;" >  
+                                <h:outputText value="#{o.fechaFin}" >
+                                    <f:convertDateTime pattern="dd.MM.yyyy " />
+                                </h:outputText>  
+                            </p:column>
+                            <f:facet name="footer">  
+                            </f:facet>  
+                        </p:dataTable>
+                    </p:panel>   
+                </h:form>
+                <p:dialog header="" widgetVar="DialogFormAut" resizable="false" id="carDlgForm"  
+                          showEffect="fade" hideEffect="explode" modal="true" appendTo="@(body)">
+                    <h:form id="formAgregaAut">
+                        <p:panel  style="width:550px; height:180px " header="Agregar Autorizaciones" id="panelAutInsert" >
+                            <p:growl id="messagesInsert" showDetail="true" />
+                            <h:panelGrid id="displayFormAut"  >
+                                <p:row>
+                                    <p:column>
+                                        <p:selectOneMenu value="#{mntAutorizaciones.idTipoAut}" effect="fade"   >            
+                                            <f:selectItems value="#{mntAutorizaciones.listTipoAut}" var="o"  itemLabel="#{o.nombre}" itemValue="#{o.id}"/>  
+                                        </p:selectOneMenu>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:calendar id="fechaIni" navigator="true"  pattern="dd/MM/yyyy" size="10"  requiredMessage="Ingrese la fecha de Inicio" value="#{mntAutorizaciones.fechaIni}" required="true"  />
+                                        <p:watermark for="fechaIni" value="Fecha Inicio" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:calendar id="fechaFin" navigator="true"  pattern="dd/MM/yyyy" size="10"  requiredMessage="Ingrese la fecha Final" value="#{mntAutorizaciones.fechaFin}" required="true" />
+                                        <p:watermark for="fechaFin" value="Fecha Final" />
+                                    </p:column>
+                                </p:row>
+                                <p:row/>
+                                <p:row>
+                                    <p:column>
+                                        <p:commandButton id="BtnAgregarAut" value="Agregar"  update="@form" ajax="true" actionListener="#{mntAutorizaciones.onInsert()}" oncomplete="ActualizaForm('formAutorizaciones', status, args)" >
+                                            <f:ajax execute="panelAutInsert" render="panelAutInsert"  />
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:row>
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:form>
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html> 

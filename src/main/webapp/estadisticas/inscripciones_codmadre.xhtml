@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="es">
+
+    <h:head>  
+        <title>Facelet Title</title>  
+    </h:head>  
+    <h:body>  
+        <ui:composition template="/templates/plantillaLayout.xhtml">
+            <ui:define name="div_principal">
+                <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>  
+                <p:dialog modal="true" widgetVar="statusDialog" header=" Datos Cargando Espere un Momento " draggable="false" closable="false">  
+                    <p:graphicImage value="/images/ajaxloadingbar.gif" />  
+                </p:dialog> 
+                <h:form>
+                    <p:panel   id="panelInscripCodMa" toggleable="true" style="width: 98%" >
+                        <p:focus context="panelInscripCodMa"/>
+                        <p:panelGrid>
+                            <p:row>
+                                <p:column>
+                                    <p:inputText value="#{inscripcionesCodmadreBean.semes}" id="semes" required="true" label="Semestre" maxlength="1" size="2" accesskey="Semestre" requiredMessage="Ingrese el semestre">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                    <p:watermark for="semes" value="Semes" />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText value="#{inscripcionesCodmadreBean.anio}" id="anio" required="true" label="Anio" maxlength="4" size="6" accesskey="Anio" requiredMessage="Ingrese el Anio">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                    <p:watermark for="anio" value="Anio" />
+                                </p:column>
+                                <p:column>
+                                    <p:calendar id="fecha" navigator="true"  pattern="dd/MM/yyyy" size="10"  requiredMessage="Ingrese la fecha de Nacimiento" value="#{inscripcionesCodmadreBean.fecha}"  />
+                                </p:column>
+
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid  >
+                            <p:row>
+                                <p:column>
+                                    <p:selectOneMenu value="#{inscripcionesCodmadreBean.codmadre}" effect="fade"   >            
+                                        <f:selectItems value="#{inscripcionesCodmadreBean.listCodMadre}" var="o"  itemLabel="#{o.nombre} (#{o.codMadre})" itemValue="#{o.codMadre}"/>  
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton value="Consulta"  id="BtnInscripCodMa"  actionListener="#{inscripcionesCodmadreBean.onProcesadata()}" update="panelInscripCodMa"  />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+                        <p:dataTable id="TableCC" var="o" value="#{inscripcionesCodmadreBean.listInscripCodmadre}" sortBy="depto"  
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} 
+                                     {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="25,50,75,100" rows="25" paginator="true"
+                                     >  
+                            <f:facet name="header">  
+                                <!--<h:outputText value="#{inscripcionesCentrosBean.titulo}" />-->
+                            </f:facet> 
+
+                            <p:column id="carrCodma" headerText="Carrera" sortBy="#{o.carrera}" >  
+                                #{o.carrera}  
+                            </p:column>  
+
+                            <p:column id="nomCodmadre" headerText="Nombre de Carrera" style="text-align:left;width:50%" sortBy="#{o.nomcarr}" >  
+                                #{o.nomcarr}  
+                            </p:column>  
+
+                            <p:column id="cantCodmadre" headerText="Cantidad" style="text-align:right" sortBy="#{o.numero}" footerText="Total:  #{inscripcionesCodmadreBean.total}">  
+                                #{o.numero}  
+                            </p:column> 
+
+                            <f:facet name="footer"  >  
+                                 
+                            </f:facet> 
+                        </p:dataTable>
+                    </p:panel>    
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html> 

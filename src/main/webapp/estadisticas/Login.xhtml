@@ -1,0 +1,72 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+
+        <h:head>
+            <h:outputStylesheet  name="css/login.css" />
+            <title>Login Acad</title>
+        </h:head>
+        <h:body>
+
+            <div id="login">
+                <p:growl id="mensajes" showDetail="true" life="2000" />
+                <h:form>
+                    <section id="ingreso">
+                        <div id="logoarriba">
+                            <h:graphicImage library="images" name="UMG.jpg" styleClass="logo" />
+                        </div>
+                        <div id="posingreso">
+                            <div class="label"><p:inputText value="#{UsuariosBean.usuario}" id="username" required="true" label="username" requiredMessage="Ingrese el Usuario" maxlength="10" styleClass="inputs" /></div>
+                            <p:watermark for="username" value="Usuario" />  
+                            <div class="label"><p:password value="#{UsuariosBean.contrasena}" id="password" required="true" label="password" requiredMessage="Ingrese la Contrasena" maxlength="10" styleClass="inputs"/></div>
+                            <p:watermark for="password" value="Password" /> 
+                        </div>
+                        <div id="botonpie">
+                            <br></br>
+                            <p:commandButton id="loginButton" value="Login"
+                                             actionListener="#{UsuariosBean.buscaLogin()}" update=":mensajes"
+                                             oncomplete="manejarLogin(xhr, status, args)" style="color:#fff; 
+                                             background:rgb(26, 104, 151); height: 30px; width: 90px; font-size: 14px"  />
+                        </div> 
+                    </section>
+                    <section id="divimagenes"> 
+                        <h:graphicImage library="images" name="#{galleriaBean.foto}" styleClass="imgs" alt="Imagen 1"/>      
+                        <div id="navi">
+                            <table>
+                                <tr>
+                                    <td class="tds"><a href="http://www.umg.edu.gt/">Universidad Mariano Galvez</a></td>
+                                    <td class="tds"><a href="http://mail.umg.edu.gt/?login">Correo Electronico</a></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </section>
+                </h:form>
+            </div>
+            <footer>
+                <table id="tabfooter">
+                    <tr>
+                        <td class="filefooter"><h4>Universidad Mariano Galvez</h4></td>
+                    </tr>
+                    <tr>
+                        <td class="filefooter"><h5>Desarrollo IT</h5> </td>
+                    </tr>
+                </table>
+            </footer>
+        </h:body>
+        <script type="text/javascript">
+            //<![CDATA[
+            function manejarLogin(xhr, status, args) {
+                if (!args.validationFailed && args.estaLogeado) {
+                    setTimeout(function() {
+                        window.location = args.view;
+                    }, 500);
+                }
+            }
+            //]]>
+        </script>
+
+    </f:view>
+</html>

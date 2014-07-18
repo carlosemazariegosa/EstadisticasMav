@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templates/plantillaLayout.xhtml">
+        <ui:define name="title">
+        </ui:define>
+        <ui:define name="div_principal" id="div_principal">
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>  
+            <p:dialog modal="true" widgetVar="statusDialog" header=" Datos Cargando Espere un Momento " draggable="false" closable="false">  
+                <p:graphicImage value="/images/ajaxloadingbar.gif" />  
+            </p:dialog> 
+
+            <h:form  id="forInscrip">
+                <p:growl id="messages" showDetail="true" />
+                <p:panel  id="panelInscrip" toggleable="true" style="width: 98%" >
+                    <section id="contenedor-grafic">
+                        <section id="principal-grafic">
+                            <p:panelGrid  >
+                                <p:row>
+                                    <p:column>
+                                        <p:selectOneMenu value="#{inscripcionesBean.semesAno}" required="true" style="width:100px ">
+                                            <f:selectItem itemLabel="22014" itemValue="22014" />
+                                            <f:selectItem itemLabel="12014" itemValue="12014" />
+                                            <f:selectItem itemLabel="22013" itemValue="22013" />
+                                            <f:selectItem itemLabel="12013" itemValue="12013" />
+                                        </p:selectOneMenu>
+                                    </p:column>
+                                    <p:column>
+                                        <p:selectOneMenu value="#{inscripcionesBean.grafica}" required="true" style="width:100px ">
+                                            <f:selectItem itemLabel="Barras" itemValue="barras" />
+                                            <f:selectItem itemLabel="Barras Unificada" itemValue="barras2" />
+                                            <f:selectItem itemLabel="Lineal" itemValue="lineas" /> 
+                                        </p:selectOneMenu>
+                                    </p:column>
+                                    <p:column>
+                                        <p:calendar id="fecnac" navigator="true"  pattern="dd/MM/yyyy" size="10"  requiredMessage="Ingrese la fecha de Nacimiento" value="#{inscripcionesBean.fecha}"  />
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandButton value="Consulta"  id="BtnInscrip"  actionListener="#{inscripcionesBean.onProcesaData()}" update="panelInscrip"  />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                            <br></br><br></br>
+                            <p:panelGrid>
+                                <f:facet name="header">  
+                                    <p:row>  
+                                        <p:column >Semestre y anio</p:column>  
+                                        <p:column >Campus central</p:column>  
+                                        <p:column >Centros departamentales</p:column>  
+                                        <p:column >Total</p:column> 
+                                        <p:column>Detalle</p:column>
+                                    </p:row>  
+                                </f:facet> 
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel id="semesAno1" value="#{inscripcionesBean.semesAno1}" />  
+                                    </p:column>
+                                    <p:column>
+                                        <p:outputLabel id="anio1Cc" value="#{inscripcionesBean.var1Cc}" />  
+                                    </p:column>
+                                    <p:column>
+                                        <p:outputLabel id="anio1Centros" value="#{inscripcionesBean.var1Cent}" />  
+                                    </p:column>
+                                    <p:column style="font-weight: bold;">
+                                        <p:outputLabel id="anio1Total" value="#{inscripcionesBean.var1Cc +inscripcionesBean.var1Cent}" />  
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandButton value="Detalle"  id="inscripTipo1"  onclick="PF('dlg1').show();" type="button"   /> 
+                                    </p:column>
+
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:dialog id="basicDialog1" header="#{inscripcionesBean.semesAno1}" widgetVar="dlg1" width="500"> 
+
+                                            <p:dataTable id="messageResultg1" var="listInscripcc1"  value="#{inscripcionesBean.listInscripCc1}">
+                                                <f:facet name="header">  
+                                                    Inscripciones campus central  
+                                                </f:facet>  
+                                                <p:column headerText="Descripcion" >
+                                                    <h:outputText value="#{listInscripcc1.descripcion}" /> 
+                                                </p:column>
+                                                <p:column headerText="Cantidad" footerText="#{inscripcionesBean.var1Cc}">
+                                                    <h:outputText value="#{listInscripcc1.numero}" /> 
+                                                </p:column> 
+
+                                            </p:dataTable>
+                                            <br></br><br></br>
+                                            <p:dataTable id="messageResultg1c" var="listInscripccen1" value="#{inscripcionesBean.listInscripCen1}" >
+                                                <f:facet name="header">  
+                                                    Inscripciones centros departamentales  
+                                                </f:facet> 
+                                                <p:column headerText="Descripcion" >
+                                                    <h:outputText value="#{listInscripccen1.descripcion}" /> 
+                                                </p:column>
+                                                <p:column headerText="Cantidad" footerText="#{inscripcionesBean.var1Cent}" >
+                                                    <h:outputText value="#{listInscripccen1.numero}" /> 
+                                                </p:column> 
+                                            </p:dataTable>
+
+                                        </p:dialog>
+
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel id="semesAno2" value="#{inscripcionesBean.semesAno2}" />  
+                                    </p:column>
+                                    <p:column>
+                                        <p:outputLabel id="anio2Cc" value="#{inscripcionesBean.var2Cc}" />  
+                                    </p:column>
+                                    <p:column>
+                                        <p:outputLabel id="anio2Centros" value="#{inscripcionesBean.var2Cent}" />  
+                                    </p:column>
+                                    <p:column style="font-weight: bold;">
+                                        <p:outputLabel id="anio2Total" value="#{inscripcionesBean.var2Cc +inscripcionesBean.var2Cent}" />  
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandButton value="Detalle"  id="inscripTipo2"  onclick="PF('dlg2').show()" type="button"  /> 
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:dialog id="basicDialog2" header="#{inscripcionesBean.semesAno2}" widgetVar="dlg2" width="500"> 
+
+                                            <p:dataTable id="messageResultg2" var="listInscripcc2"  value="#{inscripcionesBean.listInscripCc2}">
+                                                <f:facet name="header">  
+                                                    Inscripciones campus central  
+                                                </f:facet>  
+                                                <p:column headerText="Descripcion" >
+                                                    <h:outputText value="#{listInscripcc2.descripcion}" /> 
+                                                </p:column>
+                                                <p:column headerText="Cantidad" footerText="#{inscripcionesBean.var2Cc}" >
+                                                    <h:outputText value="#{listInscripcc2.numero}" /> 
+                                                </p:column> 
+                                            </p:dataTable>
+                                            <br></br><br></br>
+                                            <p:dataTable id="messageResultg2c" var="listInscripccen2" value="#{inscripcionesBean.listInscripCen2}" >
+                                                <f:facet name="header">  
+                                                    Inscripciones centros departamentales  
+                                                </f:facet> 
+                                                <p:column headerText="Descripcion" >
+                                                    <h:outputText value="#{listInscripccen2.descripcion}" /> 
+                                                </p:column>
+                                                <p:column headerText="Cantidad" footerText="#{inscripcionesBean.var2Cent}" >
+                                                    <h:outputText value="#{listInscripccen2.numero}" /> 
+                                                </p:column> 
+                                            </p:dataTable>
+
+                                        </p:dialog>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel id="semesAno3" value="#{inscripcionesBean.semesAno3}" />  
+                                    </p:column>
+                                    <p:column>
+                                        <p:outputLabel id="anio3Cc" value="#{inscripcionesBean.var3Cc}" />  
+                                    </p:column>
+                                    <p:column>
+                                        <p:outputLabel id="anio3Centros" value="#{inscripcionesBean.var3Cent}" />  
+                                    </p:column>
+                                    <p:column style="font-weight: bold;">
+                                        <p:outputLabel id="anio3Total" value="#{inscripcionesBean.var3Cc+inscripcionesBean.var3Cent}" />  
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandButton value="Detalle"  id="inscripTipo3"  onclick="PF('dlg3').show()" type="button"  /> 
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:dialog id="basicDialog3" header="#{inscripcionesBean.semesAno3}" widgetVar="dlg3" width="500"> 
+
+                                            <p:dataTable id="messageResultg3" var="listInscripcc3"  value="#{inscripcionesBean.listInscripCc3}">
+                                                <f:facet name="header">  
+                                                    Inscripciones campus central  
+                                                </f:facet>  
+                                                <p:column headerText="Descripcion" >
+                                                    <h:outputText value="#{listInscripcc3.descripcion}" /> 
+                                                </p:column>
+                                                <p:column headerText="Cantidad" footerText="#{inscripcionesBean.var3Cc}">
+                                                    <h:outputText value="#{listInscripcc3.numero}" /> 
+                                                </p:column> 
+                                            </p:dataTable>
+                                            <br></br><br></br>
+                                            <p:dataTable id="messageResultg3c" var="listInscripccen3" value="#{inscripcionesBean.listInscripCen3}" >
+                                                <f:facet name="header">  
+                                                    Inscripciones centros departamentales  
+                                                </f:facet> 
+                                                <p:column headerText="Descripcion" >
+                                                    <h:outputText value="#{listInscripccen3.descripcion}" /> 
+                                                </p:column>
+                                                <p:column headerText="Cantidad" footerText="#{inscripcionesBean.var3Cent}" >
+                                                    <h:outputText value="#{listInscripccen3.numero}" /> 
+                                                </p:column> 
+                                            </p:dataTable>
+
+                                        </p:dialog>
+                                    </p:column>
+                                    <p:column>
+
+                                    </p:column>
+                                    <p:column>
+
+                                    </p:column>
+                                    <p:column>
+
+                                    </p:column>
+                                    <p:column>
+
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                        </section>
+                        <aside id="aside-grafic">
+                            <p:barChart id="chart1" value="#{inscripcionesBean.categoryModel}" legendPosition="ne"  shadow="true" rendered="#{inscripcionesBean.barras}"
+                                        title="Inscripciones" min="#{inscripcionesBean.minimo}" max="#{inscripcionesBean.maximo}" 
+                                        seriesColors="004A00, 1975FF" yaxisLabel="" zoom="true" style="width:90%;height:380px;" animate="true"  />
+
+                            <p:lineChart id="linear" value="#{inscripcionesBean.categoryModel}" legendPosition="ne"  rendered="#{inscripcionesBean.lineas}" seriesColors="004A00, 1975FF"
+                                         title="Inscripciones" minY="#{inscripcionesBean.minimo}" maxY="#{inscripcionesBean.maximo}" style="width:90%;height:380px;" animate="true"/>
+
+                            <p:barChart id="linearStacked" value="#{inscripcionesBean.categoryModel}" legendPosition="ne"  rendered="#{inscripcionesBean.barras2}" seriesColors="004A00, 1975FF"
+                                        stacked="true"  title="Inscripciones" barMargin="50" min="#{inscripcionesBean.minimo}" max="100000" style="width:90%;height:380px;" animate="true"/> 
+                        </aside>
+
+                    </section>
+                </p:panel>
+            </h:form>
+
+
+        </ui:define>
+    </ui:composition>
+</html>

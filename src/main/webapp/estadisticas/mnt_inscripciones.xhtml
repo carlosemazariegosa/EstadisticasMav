@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="es">
+
+    <h:head>  
+        <title>Facelet Title</title>  
+    </h:head>  
+    <h:body>  
+        <ui:composition template="/templates/plantillaLayout.xhtml">
+            <ui:define name="div_principal">
+                <h:form id="formCuralum">
+                    <p:panel   id="panelInscriAl" toggleable="true" style="width: 98%;padding-bottom: 0" >
+                        <!--<p:focus context="panelInscriAl"/>-->
+                        <p:growl id="messages" showDetail="true" />
+                        <p:panelGrid  >
+                            <p:row>
+                                <p:column>
+                                    <p:inputText value="#{inscripMntAlumnos.semes}" id="semes" required="true" label="Semestre" maxlength="1" size="2" accesskey="Semestre" requiredMessage="Ingrese el semestre">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                    <p:watermark for="semes" value="Semes" />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText value="#{inscripMntAlumnos.anio}" id="anio" required="true" label="Anio" maxlength="4" size="6" accesskey="Anio" requiredMessage="Ingrese el Anio">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                    <p:watermark for="anio" value="Anio" />
+                                </p:column>
+
+                                <p:column >                                  
+                                    <p:inputText value="#{inscripMntAlumnos.facultad}" id="facultad" required="true" label="facultad" maxlength="4" size="8" accesskey="anio" requiredMessage="Ingrese la facultad">
+                                        <f:validateLength minimum="1" />
+
+                                    </p:inputText>
+                                    <p:watermark for="facultad" value="Facultad" />
+                                </p:column> 
+                                <p:column >
+                                    <p:inputText value="#{inscripMntAlumnos.anioCar}" id="anioCar" required="true" label="anio" maxlength="2" size="4" requiredMessage="Ingrese el Anio">
+                                        <f:validateLength minimum="1" />
+
+                                    </p:inputText>
+                                    <p:watermark for="anioCar" value="Anio" />
+                                </p:column>
+                                <p:column style="text-align: left;">
+                                    <p:inputText value="#{inscripMntAlumnos.carnet}" id="carnet" required="true" label="carnet" maxlength="5" size="10" requiredMessage="Ingrese el Carnet">
+                                        <f:validateLength minimum="1" />
+
+                                    </p:inputText>
+                                    <p:watermark for="carnet" value="Carnet" />
+                                </p:column>
+                                <p:column>
+                                    <p:column>
+                                        <p:commandButton value="Consulta"  id="BtnInscripAl"  actionListener="#{inscripMntAlumnos.onProcesadata()}" update="@(form)"  />
+                                    </p:column>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:dataTable   id="dataTableInscripAl" var="o" value="#{inscripMntAlumnos.listCuralum}" paginator="false" rows="15" 
+                                       paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} 
+                                       {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="15,30" style="padding-bottom: 0"  >
+
+                            <p:column headerText="Carrera"  style="text-align:left;width:100px" >  
+                                <h:outputText value="#{o.codcarr}" />  
+                            </p:column>
+                            <p:column headerText="Curso" style="text-align:left;width:100px" >  
+                                <h:outputText value="#{o.codcur}" />  
+                            </p:column>
+                            <p:column headerText="Seccion" style="text-align:left;width:50px" >  
+                                <h:outputText value="#{o.seccion}" />  
+                            </p:column>
+                            <p:column headerText="Nomcur" style="text-align:left;" >  
+                                <h:outputText value="#{o.nomCur}" />  
+                            </p:column>
+                        </p:dataTable>                        
+                    </p:panel>
+                </h:form>
+                <h:form id="formIngre" >
+                    <p:panel   id="panelInscriAlIngre" toggleable="true" style="width: 98%;padding-top: 0" rendered="#{inscripMntAlumnos.muestraForm}"  >
+                        <p:focus context="panelInscriAlIngre"/>
+
+                        <p:panelGrid style="padding-top: 0">
+                            <p:row>
+                                <p:column>
+                                    <p:inputText value="#{inscripMntAlumnos.codCarrera}" id="codCarrera" style="width:100px;padding-left:0;padding-right:0;" required="true" label="codCarr" maxlength="4" size="2" accesskey="codCarrera" requiredMessage="Ingrese la Carrera" >
+                                        <p:ajax event="blur"  /> 
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                </p:column>
+
+                                <p:column style="text-align:left;" >  
+                                    <p:inputText value="#{inscripMntAlumnos.codcur}" id="codcur" style="width:100px;padding-left:0;padding-right:0;"  required="true" label="Codcur" maxlength="3"  accesskey="Codcur" requiredMessage="Ingrese Codigo de Curso">
+                                        <p:ajax event="blur"  />
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>  
+                                </p:column>
+                                <p:column   style="text-align:left;" >  
+                                    <p:inputText value="#{inscripMntAlumnos.seccion}" id="seccion"  style="width:50px;padding-left:0;padding-right:0;"  required="true" label="Seccion" maxlength="1"  accesskey="Seccion" requiredMessage="Ingrese Seccion" >
+
+                                        <p:ajax event="blur" update="@form" rendered="panelInscriAlIngre"  listener="#{inscripMntAlumnos.onNomcurso()}" oncomplete="ActualizaForm('formCuralum', status, args)" />
+
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>  
+                                </p:column>
+                                <p:column>
+
+                                </p:column>
+
+
+                            </p:row>
+                        </p:panelGrid>
+                    </p:panel>
+                </h:form>
+                <h:form id="formCurdet"  style="text-align:left;"  >  
+                    <p:growl id="growl" showDetail="true" />  
+                    <p:commandButton  id="butPant" value="Busca Curso" icon="ui-icon-extlink"  actionListener="#{inscripMntAlumnos.onBuscaCurso()}" rendered="#{inscripMntAlumnos.muestraForm}" >  
+                        <p:ajax event="dialogReturn" listener="#{inscripMntAlumnos.onCarChosen}" update=":formIngre" oncomplete="ActualizaForm('formCuralum', status, args)" />
+
+                    </p:commandButton>  
+                </h:form>  
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html> 

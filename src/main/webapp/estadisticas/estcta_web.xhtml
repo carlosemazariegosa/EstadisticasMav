@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templates/plantillaLayout.xhtml">
+        <ui:define name="title">
+
+        </ui:define>
+        <ui:define name="div_principal" >
+            <p:dialog modal="true" widgetVar="statusDialog" header="Imprimiendo, espero un momento...." draggable="false" closable="false" resizable="false">  
+                <p:graphicImage  value="/design/ajaxloadingbar.gif" />   
+            </p:dialog>
+
+            <p:layoutUnit position="center" style="text-align: center;border-style:none;background: #F8F8F8" >
+                <f:view class="xml">
+                    <!--<pre name="code" class="xml">-->
+                    <p:growl id="mensajeEstcta" showDetail="true" life="2000" />
+                    <h:form prependId="false" id="formulario">                      
+                        <p:panel  style="border-style:none"  id="panelEstcta"  >
+                            <p:focus context="panelEstcta"/>
+                            <p:growl id="messages" showDetail="true" />
+                            <p:panelGrid id="gridForm" style="border-collapse: collapse">
+                                <p:row>
+                                    <p:column >                                
+                                        <h:outputLabel id="lblCarnet" value="Carnet:" />
+                                    </p:column >
+                                    <p:column >                                  
+                                        <p:inputText value="#{estctaBean.facultad}" id="facultad" required="true" label="facultad" maxlength="4" size="8"  requiredMessage="Ingrese la facultad">
+                                            <f:validateLength minimum="1" />
+                                        </p:inputText>
+                                        <p:watermark for="facultad" value="Facultad" />
+                                    </p:column> 
+                                    <p:column >
+                                        <p:inputText value="#{estctaBean.anio}" id="anio" required="true" label="anio" maxlength="2" size="4" requiredMessage="Ingrese el Anio">
+                                            <f:validateLength minimum="1" />
+
+                                        </p:inputText>
+                                        <p:watermark for="anio" value="Anio" />
+                                    </p:column>
+                                    <p:column style="text-align: left;">
+                                        <p:inputText value="#{estctaBean.carnet}" id="Carnet" required="true" label="carnet" maxlength="5" size="10" requiredMessage="Ingrese el Carnet">
+                                            <f:validateLength minimum="1" />
+
+                                        </p:inputText>
+                                        <p:watermark for="Carnet" value="Carnet" />
+                                    </p:column> 
+                                    <p:column>
+                                        <p:commandButton value="Consulta"  id="ButtonEscta" update="panelEstcta" >
+                                            <f:actionListener   binding="#{estctaBean.onRestEstcta()}"/>
+                                            <f:actionListener   binding="#{estctaBean.onNomCarrera()}"/>
+                                            <f:actionListener   binding="#{estctaBean.onDatAlum()}"/>
+                                        </p:commandButton>                                        
+                                    </p:column> 
+                                </p:row> 
+                                <p:row>
+                                    <p:column>
+                                        <p:commandButton id="ButtonPdf" value="  PDF  "   ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" >  
+
+                                            <p:fileDownload value="#{estctaBean.onImprime('PDF')}" />                                      
+                                        </p:commandButton>
+                                        <h:commandButton   action="#{estctaBean.onImprimeXXX()}" value="XXX"   >
+                                            
+                                        </h:commandButton>
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandButton id="ButtonDocx" value="  DOCX  "   ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"   >                                       
+                                            <p:fileDownload value="#{estctaBean.onImprime('DOCX')}" />
+                                        </p:commandButton>
+                                    </p:column>
+
+                                    <p:column>
+                                        <p:commandButton id="ButtonXlsx" value="  XLSX  "   ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"  > 
+
+                                            <p:fileDownload value="#{estctaBean.onImprime('XLSX')}" />
+                                        </p:commandButton> 
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                            <p:panelGrid id="gridDat" >
+                                <p:row>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel value="Nombre" />
+                                    </p:column> 
+                                    <p:column style="text-align:left;width:100%" >                                 
+                                        <p:outputLabel id="nomAlumn" value="#{estctaBean.nombre}  " />                                   
+                                        <p:outputLabel id="apeAlumn" value="#{estctaBean.apellido}" />
+                                    </p:column>   
+                                </p:row>
+                                <p:row>
+                                    <p:column style="text-align: left" >
+                                        <p:outputLabel value="Carrera      " />
+                                    </p:column>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel id="nomcARR" value="#{estctaBean.nomcarrera}"/>   
+                                    </p:column> 
+                                </p:row>
+
+                            </p:panelGrid>
+                            <p:dataTable id="dataTable" var="estctaModel" value="#{estctaBean.listEstcta}" paginator="true" rows="9"  
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} 
+                                         {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,15,20"  filteredValue="#{estctaBean.filteredEstcta}">
+                                <p:column headerText="Fecha" sortBy="#{estctaModel.fecha}">  
+                                    <h:outputText value="#{estctaModel.fecha}" />  
+                                </p:column>
+                                <p:column headerText="Codmov" sortBy="#{estctaModel.codmov}">  
+                                    <h:outputText value="#{estctaModel.codmov}" />  
+                                </p:column>
+                                <p:column headerText="TipoMov" sortBy="#{estctaModel.tipomov}">  
+                                    <h:outputText value="#{estctaModel.tipomov}" />  
+                                </p:column>
+                                <p:column headerText="Abreviatura" sortBy="#{estctaModel.abreviatura}">  
+                                    <h:outputText value="#{estctaModel.abreviatura}" />  
+                                </p:column>
+                                <p:column headerText="Poliza" sortBy="#{estctaModel.poliza}">  
+                                    <h:outputText value="#{estctaModel.poliza}" />  
+                                </p:column>
+                                <p:column headerText="SemesAno" sortBy="#{estctaModel.semesano}">  
+                                    <h:outputText value="#{estctaModel.semesano}" />  
+                                </p:column>
+                                <p:column headerText="Cargos" sortBy="#{estctaModel.cargos}">  
+                                    <h:outputText value="#{estctaModel.cargos}" />  
+                                </p:column>
+                                <p:column headerText="Abonos" sortBy="#{estctaModel.abonos}">  
+                                    <h:outputText value="#{estctaModel.abonos}" />  
+                                </p:column>
+                                <p:column headerText="Saldo" sortBy="#{estctaModel.saldo}">  
+                                    <h:outputText value="#{estctaModel.saldo}" />  
+                                </p:column>
+                                <p:column headerText="Mes" sortBy="#{estctaModel.mes}">  
+                                    <h:outputText value="#{estctaModel.mes}" />  
+                                </p:column>
+                                <p:column headerText="Documento" sortBy="#{estctaModel.documento}" filterBy="#{estctaModel.documento}">  
+                                    <h:outputText value="#{estctaModel.documento}" />  
+                                </p:column>
+                                <p:column style="width:4%">  
+                                    <p:commandButton id="selectButton" update=":formulario:display" oncomplete="PF('estctaDialog').show()"  icon="ui-icon-search" title="View" >  
+                                        <f:setPropertyActionListener value="#{estctaModel}" target="#{estctaBean.selectedEstcta}" />  
+                                    </p:commandButton>  
+                                </p:column> 
+                            </p:dataTable>
+                        </p:panel>
+
+                        <p:dialog header="Detalle Estado de Cuenta" widgetVar="estctaDialog" resizable="false" id="carDlg"  
+                                  showEffect="fade" hideEffect="explode" modal="true" appendTo="@(body)">  
+                            <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">  
+                                <h:outputText value="TipoMov:" />  
+                                <h:outputText value="#{estctaBean.selectedEstcta.tipomov}" style="font-weight:bold"/>
+                            </h:panelGrid>  
+                        </p:dialog>  
+                    </h:form>
+                    <script type="text/javascript">
+                        function start() {
+                            PF('statusDialog').show();
+                        }
+                        function stop() {
+                            PF('statusDialog').hide();
+                        }
+                    </script>
+
+                </f:view> 
+            </p:layoutUnit>
+
+
+        </ui:define>
+
+    </ui:composition>
+</html>

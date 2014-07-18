@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="es">
+
+    <h:head>  
+        <title>Facelet Title</title>  
+    </h:head>  
+    <h:body>  
+        <ui:composition template="/templates/plantillaLayout.xhtml">
+            <ui:define name="div_principal">
+                <h:form id="formulario">
+                    <p:panel   id="panelCateObs"  style="width: 98%" >
+                        <p:focus context="panelCateObs"/>
+                        <p:panelGrid>
+                            <p:row>
+                                <p:column>
+                                    <h:outputLabel  value="No Elegibles:" />
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton value="Consulta"  id="BtnCatObs"  actionListener="#{catedraticoObsBean.onProcesadata()}" update="panelCateObs"  />
+                                </p:column>
+                                <p:column>
+                                    <h:commandLink>  
+                                        <p:graphicImage value="/images/pdf.png" />  
+                                        <p:dataExporter type="pdf" target="dataTableEstProp" fileName="listCatedraticosObs"/>  
+                                    </h:commandLink>   
+                                    <h:commandLink>  
+                                        <p:graphicImage value="/images/excel.png" />  
+                                        <p:dataExporter type="xls" target="dataTableEstProp" fileName="listCatedraticosObs"/>  
+                                    </h:commandLink> 
+
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+                        <p:dataTable   id="dataTableEstProp" var="o" value="#{catedraticoObsBean.listCatedraticosObs}" paginator="true" rows="25"  sortBy="apellido"
+                                       paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} 
+                                       {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="25,50,100" filteredValue="#{catedraticoObsBean.filteredCateObs}">
+
+                            <p:column  sortBy="#{o.abrv}" style="text-align:left;"> 
+                                <f:facet name="header">  
+                                    <h:outputText value="Abreviatura" />  
+                                </f:facet> 
+                                <h:outputText value="#{o.abrv}" />  
+                            </p:column>
+                            <p:column  sortBy="#{o.codcat}" style="text-align:left;" filterBy="#{o.codcat}" > 
+                                <f:facet name="header">  
+                                    <h:outputText value="Codigo" />  
+                                </f:facet> 
+                                <h:outputText value="#{o.codcat}" />  
+                            </p:column>
+                            <p:column  sortBy="#{o.nombre}" style="text-align:left;" filterBy="#{o.nombre}" filterMatchMode="contains"   >
+                                <f:facet name="header">  
+                                    <h:outputText value="Nombre" />  
+                                </f:facet>
+                                <h:outputText value="#{o.nombre}" />  
+                            </p:column>
+                            <p:column  sortBy="#{o.apellido}" style="text-align:left;" filterBy="#{o.apellido}" filterMatchMode="contains" >
+                                <f:facet name="header">  
+                                    <h:outputText value="Apellido" />  
+                                </f:facet>
+                                <h:outputText value="#{o.apellido.toUpperCase()}" />  
+                            </p:column>
+                            <p:column  sortBy="#{o.fecha}" style="text-align:left;" >
+                                <f:facet name="header">  
+                                    <h:outputText value="Fecha" />  
+                                </f:facet>
+                                <h:outputText value="#{o.fecha}" />  
+                            </p:column>
+                            <p:column  headerText="Observacion" exportable="false">  
+                                <p:commandButton id="selectButton" update=":formulario:display" oncomplete="PF('estctaDialog').show()"  icon="ui-icon-search" title="View" >  
+                                    <f:setPropertyActionListener value="#{o}" target="#{catedraticoObsBean.selectedCateObs}" />  
+                                </p:commandButton>  
+                            </p:column> 
+                            <f:facet name="footer">  
+                            </f:facet>  
+                        </p:dataTable>
+                    </p:panel>
+                    <p:dialog header="Observaciones " widgetVar="estctaDialog" width="35%" height="120" resizable="false" id="carDlg"  
+                              showEffect="fade" hideEffect="explode" modal="true" appendTo="@(body)">  
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;"> 
+                            <p:panelGrid >
+                                <p:row>
+                                    <p:column style="border-style:none;">
+                                        <h:outputText  value="Catedratico : #{catedraticoObsBean.selectedCateObs.codcat} #{catedraticoObsBean.selectedCateObs.nombre} #{catedraticoObsBean.selectedCateObs.apellido} " style="font-weight:bold"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="border-style:none;">
+                                        <h:outputText value="#{catedraticoObsBean.selectedCateObs.observacion}" />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                        </h:panelGrid>  
+                    </p:dialog> 
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html> 

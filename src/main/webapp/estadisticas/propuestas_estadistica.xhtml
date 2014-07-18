@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="es">
+
+    <h:head>  
+        <title>Facelet Title</title>  
+    </h:head>  
+    <h:body>  
+        <ui:composition template="/templates/plantillaLayout.xhtml">
+            <ui:define name="div_principal">
+                <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>  
+                <p:dialog modal="true" widgetVar="statusDialog" header=" Datos Cargando Espere un Momento " draggable="false" closable="false">  
+                    <p:graphicImage value="/images/ajaxloadingbar.gif" />  
+                </p:dialog> 
+                <h:form>
+                    <p:panel   id="panelPropEst"  style="width: 98%" >
+                        <p:focus context="panelPropEst"/>
+                        <p:panelGrid>
+                            <p:row>
+                                <p:column>
+                                    <p:inputText value="#{propEstBean.semes}" id="semes" required="true" label="Semestre" maxlength="1" size="2" accesskey="Semestre" requiredMessage="Ingrese el semestre">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                    <p:watermark for="semes" value="Semes" />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText value="#{propEstBean.anio}" id="anio" required="true" label="Anio" maxlength="4" size="6" accesskey="Anio" requiredMessage="Ingrese el Anio">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                    <p:watermark for="anio" value="Anio" />
+                                </p:column>
+                                <p:column>
+                                    <p:column>
+                                        <p:commandButton value="Consulta"  id="BtnPropEst"  actionListener="#{propEstBean.onProcesadata()}" update="panelPropEst"  />
+                                    </p:column>
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+                        <p:dataTable   id="dataTableEstProp" var="o" value="#{propEstBean.listPropuestaEst}" paginator="false" rows="15" 
+                                       paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} 
+                                       {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="15,30">
+
+                            <p:column headerText="Descripcion" sortBy="#{o.descripcion}" style="text-align:left;">  
+                                <h:outputText value="#{o.descripcion}" />  
+                            </p:column>
+                            <p:column headerText="Cantidad" sortBy="#{o.cantidad}" style="text-align:left;" >  
+                                <h:outputText value="#{o.cantidad}" />  
+                            </p:column>            
+                            <f:facet name="footer">  
+
+                            </f:facet>  
+
+                        </p:dataTable>
+
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html> 

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="es">
+
+    <h:head>  
+        <title>Facelet Title</title>  
+    </h:head>  
+    <h:body>  
+        <ui:composition template="/templates/plantillaLayout.xhtml">
+            <ui:define name="div_principal">
+                <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>  
+                <p:dialog modal="true" widgetVar="statusDialog" header=" Datos Cargando Espere un Momento " draggable="false" closable="false">  
+                    <p:graphicImage value="/images/ajaxloadingbar.gif" />  
+                </p:dialog> 
+                <h:form>
+                    <p:panel   id="panelInscripCarr" toggleable="true" style="width: 98%" >
+                         <p:focus context="panelInscripCarr"/>
+                        <p:panelGrid  >
+                            <p:row>
+                                <p:column>
+                                    <p:inputText value="#{inscripcionesTipoBean.semes}" id="semes" required="true" label="Semestre" maxlength="1" size="2" accesskey="Semestre" requiredMessage="Ingrese el semestre">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                    <p:watermark for="semes" value="Semes" />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText value="#{inscripcionesTipoBean.anio}" id="anio" required="true" label="Anio" maxlength="4" size="6" accesskey="Anio" requiredMessage="Ingrese el Anio">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                    <p:watermark for="anio" value="Anio" />
+                                </p:column>
+                                <p:column>
+                                    <p:selectOneMenu value="#{inscripcionesTipoBean.ubicacion}" required="true"  style="width:195px" >
+                                        <f:selectItem itemLabel="Campus Central" itemValue="CampusCent" />
+                                        <f:selectItem itemLabel="Centros Departamentales" itemValue="CentrosDep" />
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column>
+                                    <p:selectOneMenu value="#{inscripcionesTipoBean.tipo}" required="true"  style="width:130px" >
+                                        <f:selectItem itemLabel="General" itemValue="General" />
+                                        <f:selectItem itemLabel="Por Tipo" itemValue="Tipo" />
+                                        <f:selectItem itemLabel="Por Centro" itemValue="Centro" />
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column>
+                                    <p:column>
+                                        <p:calendar id="fecha" navigator="true"  pattern="dd/MM/yyyy" size="10"  requiredMessage="Ingrese la fecha de Nacimiento" value="#{inscripcionesTipoBean.fecha}"  />
+                                    </p:column>
+                                </p:column>
+                                <p:column>
+                                    <p:column>
+                                        <p:commandButton value="Consulta"  id="BtnInscripCarr"  actionListener="#{inscripcionesTipoBean.onProcesadata()}" update="panelInscripCarr"  />
+                                    </p:column>
+                                </p:column>
+
+                            </p:row>
+                        </p:panelGrid>
+                        <p:dataTable   id="dataTable" var="o" value="#{inscripcionesTipoBean.listModel}" paginator="true" rows="25" rendered="#{inscripcionesTipoBean.tabla}"
+                                       paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} 
+                                       {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="25,50,75,100">
+                            <f:facet name="header">  
+                                <h:outputText value="#{inscripcionesTipoBean.titulo}" />
+                            </f:facet>  
+                            <p:column headerText="Carrera" sortBy="#{o.carrera}" >  
+                                <h:outputText value="#{o.carrera}" />  
+                            </p:column>
+                            <p:column headerText="Nombre de Carrera"  sortBy="#{o.nomcarr}" style="text-align:left;width:40%" >  
+                                <h:outputText value="#{o.nomcarr}" />  
+                            </p:column>
+                            <p:column headerText="Tipo" sortBy="#{o.descripcion}">  
+                                <h:outputText value="#{o.descripcion}" />  
+                            </p:column>
+                            <p:column headerText="Departamento" sortBy="#{o.depto}"  style="text-align:left;" >  
+                                <h:outputText value="#{o.depto}" />  
+                            </p:column>
+                            <p:column headerText="Cantidad" sortBy="#{o.numero}" >  
+                                <h:outputText value="#{o.numero}" />  
+                            </p:column>
+                            <f:facet name="footer">  
+                                Total de Alumnos Inscritos #{inscripcionesTipoBean.total}   
+                            </f:facet>  
+
+                        </p:dataTable>
+                        <p:dataTable id="carsTable" var="o" value="#{inscripcionesTipoBean.listModel}" sortBy="descripcion"  rendered="#{inscripcionesTipoBean.subTabla}"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} 
+                                     {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="25,50,75,100" rows="25" paginator="true"
+                                     >  
+                            <f:facet name="header">  
+                                <h:outputText value="#{inscripcionesTipoBean.titulo}" />
+                            </f:facet> 
+                            <p:column id="modelHeader" headerText="Carrera" >  
+                                #{o.carrera}  
+                            </p:column>  
+
+                            <p:column id="yearHeader" headerText="Nombre de Carrera" style="text-align:left;" >  
+                                #{o.nomcarr}  
+                            </p:column>  
+
+                            <p:column id="manufacturerHeader" headerText="Tipo" sortBy="descripcion">  
+                                #{o.descripcion}  
+                            </p:column>  
+
+                            <p:column id="colorHeader" headerText="Cantidad" >  
+                                #{o.numero}  
+                            </p:column>  
+
+                            <p:summaryRow listener="#{inscripcionesTipoBean.calculateTotal(o.descripcion)}" >  
+                                <p:column colspan="3" style="text-align:right">  
+                                    Total:  
+                                </p:column>  
+
+                                <p:column>  
+                                    #{inscripcionesTipoBean.subTotal}  
+                                </p:column>  
+                            </p:summaryRow> 
+                            <f:facet name="footer">  
+                                Total de Alumnos Inscritos #{inscripcionesTipoBean.total}   
+                            </f:facet> 
+                        </p:dataTable>
+                        <p:dataTable   id="dataTableDep" var="o" value="#{inscripcionesTipoBean.listModel}" paginator="true" rows="25" rendered="#{inscripcionesTipoBean.subTablaCen}"
+                                       paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} 
+                                       {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="25,50">
+                            <f:facet name="header">  
+                                <h:outputText value="#{inscripcionesTipoBean.titulo}" />
+                            </f:facet>  
+                            <p:column headerText="Departamento" sortBy="#{o.descripcion}" style="text-align:left;">  
+                                <h:outputText value="#{o.descripcion}" />  
+                            </p:column>
+
+                            <p:column headerText="Cantidad" sortBy="#{o.numero}" footerText="Alumnos Inscritos #{inscripcionesTipoBean.total}">  
+                                <h:outputText value="#{o.numero}" />  
+                            </p:column>
+                            <f:facet name="footer">  
+
+                            </f:facet>  
+
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html> 

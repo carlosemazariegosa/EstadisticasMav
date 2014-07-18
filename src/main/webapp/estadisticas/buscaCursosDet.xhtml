@@ -1,0 +1,41 @@
+<!DOCTYPE html>  
+<html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:h="http://java.sun.com/jsf/html"  
+      xmlns:f="http://java.sun.com/jsf/core"  
+      xmlns:ui="http://java.sun.com/jsf/facelets"  
+      xmlns:p="http://primefaces.org/ui">  
+
+    <h:head>  
+        <title>Cursos</title>  
+        <h:outputStylesheet  name="css/Style.css"  />
+    </h:head>  
+
+    <h:body>  
+        <h:form>
+
+            <p:dataTable var="o" value="#{buscaCursosDet.listCursosDet}">  
+                <p:column headerText="Codcarr">  
+                    <h:outputText value="#{o.codcarr}" />  
+                </p:column>  
+
+                <p:column headerText="Curso">  
+                    <h:outputText value="#{o.codcur}" />  
+                </p:column>  
+
+                <p:column headerText="Seccion">  
+                    <h:outputText value="#{o.seccion}" />  
+                </p:column>  
+
+                <p:column headerText="Nombre">  
+                    <h:outputText value="#{o.nomcur}" />  
+                </p:column>  
+
+                <p:column headerText="Seleccione">  
+                    <p:commandButton icon="ui-icon-search" actionListener="#{inscripMntAlumnos.selectCarFromDialog(o)}" />  
+                </p:column>  
+            </p:dataTable> 
+
+        </h:form>  
+    </h:body>  
+
+</html>  

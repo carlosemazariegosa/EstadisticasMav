@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="es">
+
+    <h:head>  
+        <title>Facelet Title</title>  
+    </h:head>  
+    <h:body>  
+        <ui:composition template="/templates/plantillaLayout.xhtml">
+            <ui:define name="div_principal">
+                <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>  
+                <p:dialog modal="true" widgetVar="statusDialog" header=" Datos Cargando Espere un Momento " draggable="false" closable="false">  
+                    <p:graphicImage value="/images/ajaxloadingbar.gif" />  
+                </p:dialog> 
+                <h:form id="formInscrip">                
+                    <p:panel   id="panelInscrip"  style="width: 98%" >
+                        <p:focus context="panelInscrip"/>
+                        <p:growl id="mensajeInscrip" showDetail="true" life="2000" />
+                        <p:panelGrid>
+                            <p:row>
+                                <p:column>
+                                    <p:selectOneMenu value="#{mntInscripcionesBean.semesAno}" required="true" style="width:100px ">
+                                        <f:selectItem itemLabel="12014" itemValue="12014" />
+                                        <f:selectItem itemLabel="22013" itemValue="22013" />
+                                        <f:selectItem itemLabel="12013" itemValue="12013" />
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column >                                  
+                                    <p:inputText value="#{mntInscripcionesBean.facultad}" id="facultad" required="true" label="facultad" maxlength="4" size="8" accesskey="anio" requiredMessage="Ingrese la facultad">
+                                        <f:validateLength minimum="1" />
+
+                                    </p:inputText>
+                                    <p:watermark for="facultad" value="Facultad" />
+                                </p:column> 
+                                <p:column >
+                                    <p:inputText value="#{mntInscripcionesBean.anio}" id="anio" required="true" label="anio" maxlength="2" size="4" requiredMessage="Ingrese el Anio">
+                                        <f:validateLength minimum="1" />
+
+                                    </p:inputText>
+                                    <p:watermark for="anio" value="Anio" />
+                                </p:column>
+                                <p:column style="text-align: left;">
+                                    <p:inputText value="#{mntInscripcionesBean.carnet}" id="Carnet" required="true" label="carnet" maxlength="5" size="10" requiredMessage="Ingrese el Carnet">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                    <p:watermark for="Carnet" value="Carnet" />
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton value="Consulta"  id="btnInscrip" update="panelInscrip" actionListener="#{mntInscripcionesBean.onBuscaDat()}" />
+                                </p:column> 
+                            </p:row>
+
+                        </p:panelGrid>
+                        <p:panelGrid id="gridDat" >
+                            <p:row>
+                                <p:column style="text-align: left">
+                                    <p:outputLabel value="Nombre" />
+                                </p:column> 
+                                <p:column style="text-align:left;width:100%" >                                 
+                                    <p:outputLabel id="nomAlumn" value="#{mntInscripcionesBean.nombre}  " />                                   
+                                    <p:outputLabel id="apeAlumn" value="#{mntInscripcionesBean.apellido}" />
+                                </p:column>   
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align: left" >
+                                    <p:outputLabel value="Carrera      " />
+                                </p:column>
+                                <p:column style="text-align: left">
+                                    <p:outputLabel id="nomcARR" value="#{mntInscripcionesBean.nomCarr}"/>   
+                                </p:column> 
+                            </p:row>
+
+                        </p:panelGrid>
+                        <p:dataTable   id="dataTableInscrip" var="o" value="#{mntInscripcionesBean.listInscripciones}" paginator="false" rows="25"  sortBy="apellido"
+                                       paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} 
+                                       {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="25,50,100"   selection="#{mntInscripcionesBean.selectedInscrip}"  rowKey="#{o.id}" style="margin-bottom:0">
+                            <!--<f:facet name="header">
+                                Cursos Disponibles
+                                <p:commandButton id="toggler" type="button" value="Columns" style="text-align:left;" icon="ui-icon-calculator" />
+                                <p:columnToggler datasource="dataTableInscrip" trigger="toggler" />
+                            </f:facet>-->
+                            <p:column headerText="Id">
+                                <h:outputText value="#{o.id}" />
+                            </p:column>
+                            <p:column  sortBy="#{o.codcarr}" style="text-align:left;"> 
+                                <f:facet name="header">  
+                                    <h:outputText value="Carrera" />  
+                                </f:facet> 
+                                <h:outputText value="#{o.codcarr}" />  
+                            </p:column>
+                            <p:column  sortBy="#{o.codcur}" style="text-align:left;"  > 
+                                <f:facet name="header">  
+                                    <h:outputText value="Curso" />  
+                                </f:facet> 
+                                <h:outputText value="#{o.codcur}" />  
+                            </p:column>
+                            <p:column  sortBy="#{o.nombre}" style="text-align:left;width:35%"   >
+                                <f:facet name="header">  
+                                    <h:outputText value="Nombre" />  
+                                </f:facet>
+                                <h:outputText value="#{o.nombre}" />  
+                            </p:column>
+                            <p:column  sortBy="#{o.seccion}" style="text-align:left;" >
+                                <f:facet name="header">  
+                                    <h:outputText value="Seccion" />  
+                                </f:facet>
+                                <h:outputText value="#{o.seccion}" />  
+                            </p:column>
+                            <p:column  sortBy="#{o.ciclo}" style="text-align:left;" >
+                                <f:facet name="header">  
+                                    <h:outputText value="Ciclo" />  
+                                </f:facet>
+                                <h:outputText value="#{o.ciclo}" />  
+                            </p:column>
+                            <p:column  sortBy="#{o.aula}" style="text-align:left;" >
+                                <f:facet name="header">  
+                                    <h:outputText value="Aula" />  
+                                </f:facet>
+                                <h:outputText value="#{o.aula}" />  
+                            </p:column>
+                            <p:column selectionMode="multiple" style="width:4%;text-align:center" />
+                            <f:facet name="footer">
+                                <p:commandButton process="dataTableInscrip" update=":formInscrip:multiCarDetail" icon="ui-icon-search" value="Inserta" oncomplete="PF('multiCarDialog').show()" />
+                            </f:facet>
+                        </p:dataTable>
+
+                    </p:panel>
+                    <p:dialog header="Cursos Seleccionados" widgetVar="multiCarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="400" height="300">
+                        <p:outputPanel id="multiCarDetail" style="text-align:center;">
+                            <ui:repeat value="#{mntInscripcionesBean.selectedInscrip}" var="oDet">
+                                <h:outputText value="#{oDet.codcarr} - #{oDet.codcur} - #{oDet.nombre} - #{oDet.seccion}  " style="display:block;text-align:left;"/>
+                            </ui:repeat>
+                        </p:outputPanel>
+                    </p:dialog>
+
+                </h:form>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html> 

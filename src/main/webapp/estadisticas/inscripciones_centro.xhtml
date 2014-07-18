@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="es">
+
+    <h:head>  
+        <title>Facelet Title</title>  
+    </h:head>  
+    <h:body>  
+        <ui:composition template="/templates/plantillaLayout.xhtml">
+            <ui:define name="div_principal">
+                <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>  
+                <p:dialog modal="true" widgetVar="statusDialog" header=" Datos Cargando Espere un Momento " draggable="false" closable="false">  
+                    <p:graphicImage value="/images/ajaxloadingbar.gif" />  
+                </p:dialog> 
+                <h:form>
+                    <p:panel   id="panelInscripCent" toggleable="true" style="width: 98%" >
+                        <p:focus context="panelInscripCent"/>
+                        <p:panelGrid  >
+                            <p:row>
+                                <p:column>
+                                    <p:inputText value="#{inscripcionesCentrosBean.semes}" id="semes" required="true" label="Semestre" maxlength="1" size="2" accesskey="Semestre" requiredMessage="Ingrese el semestre">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                    <p:watermark for="semes" value="Semes" />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText value="#{inscripcionesCentrosBean.anio}" id="anio" required="true" label="Anio" maxlength="4" size="6" accesskey="Anio" requiredMessage="Ingrese el Anio">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                    <p:watermark for="anio" value="Anio" />
+                                </p:column>
+                                <p:column>
+                                    <p:selectOneMenu value="#{inscripcionesCentrosBean.ubicacion}" required="true"  style="width:200px" >
+                                        <f:selectItem itemLabel="Centros Departamentales" itemValue="CentrosDep" />
+                                        <f:selectItem itemLabel="Campus Central" itemValue="CampusCent" />                                        
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column>
+                                    <p:column>
+                                        <p:calendar id="fecha" navigator="true"  pattern="dd/MM/yyyy" size="10"  requiredMessage="Ingrese la fecha de Nacimiento" value="#{inscripcionesCentrosBean.fecha}"  />
+                                    </p:column>
+                                </p:column>
+                                <p:column>
+                                    <p:column>
+                                        <p:commandButton value="Consulta"  id="BtnInscripCarr"  actionListener="#{inscripcionesCentrosBean.onProcesadata()}" update="panelInscripCent"  />
+                                    </p:column>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:dataTable id="TableCC" var="o" value="#{inscripcionesCentrosBean.listModel}" sortBy="depto"  rendered="#{inscripcionesCentrosBean.tablaCC}"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} 
+                                     {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="25,50,75,100" rows="25" paginator="true"
+                                     >  
+                            <f:facet name="header">  
+                                <h:outputText value="#{inscripcionesCentrosBean.titulo}" />
+                            </f:facet> 
+                            <p:column id="CCdepto" headerText="Departamento" >  
+                                #{o.depto}  
+                            </p:column>  
+                            <p:column id="CCNombre" headerText="Carrera" >  
+                                #{o.carrera}  
+                            </p:column>  
+
+                            <p:column id="CCNomcarr" headerText="Nombre de Carrera" style="text-align:left;" >  
+                                #{o.nomcarr}  
+                            </p:column>  
+
+                            <p:column id="CCCantPrim" headerText="Primer Ingreso" >  
+                                #{o.numeroPrim}  
+                            </p:column>
+                            <p:column id="CCCantRein" headerText="Reingreso" >  
+                                #{o.numeroReingre}  
+                            </p:column>
+                            <p:column id="CCCant" headerText="Total" >  
+                                #{o.numero}  
+                            </p:column>
+                            <p:summaryRow listener="#{inscripcionesCentrosBean.calculateTotal(o.depto)}" >  
+                                <p:column colspan="3" style="text-align:right">  
+                                    Totales:  
+                                </p:column>  
+
+                                <p:column>  
+                                    #{inscripcionesCentrosBean.subTotalPrim} 
+                                </p:column> 
+
+                                <p:column>  
+                                    #{inscripcionesCentrosBean.subTotalRein}  
+                                </p:column>
+                                <p:column>
+                                    #{inscripcionesCentrosBean.subTotal}  
+                                </p:column>  
+                            </p:summaryRow> 
+
+
+                            <f:facet name="footer" >  
+                                Total de Alumnos Inscritos #{inscripcionesCentrosBean.total}   
+                            </f:facet> 
+                        </p:dataTable>
+                        <p:dataTable id="TableCentros" var="o" value="#{inscripcionesCentrosBean.listModel}" sortBy="depto"  rendered="#{inscripcionesCentrosBean.tablaCentros}"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} 
+                                     {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="25,50,75,100" rows="25" paginator="true" filteredValue="#{inscripcionesCentrosBean.filteredDepto}"
+                                     >  
+                            <f:facet name="header">  
+                                <h:outputText value="#{inscripcionesCentrosBean.titulo}" />
+                            </f:facet> 
+                            <p:column id="centrosdep" headerText="Departamento" sortBy="#{o.depto}" filterBy="#{o.depto}">  
+                                #{o.depto}  
+                            </p:column>  
+                            <p:column id="centrosCarrera" headerText="Carrera" >  
+                                #{o.carrera}  
+                            </p:column>  
+
+                            <p:column id="centrosNombre" headerText="Nombre de Carrera" style="text-align:left;width:30%" >  
+                                #{o.nomcarr}  
+                            </p:column> 
+                            <p:column id="centrosCantPrim" headerText="Primer Ingreso" >  
+                                #{o.numeroPrim}  
+                            </p:column>
+                            <p:column id="centrosCantRein" headerText="Reingreso" >  
+                                #{o.numeroReingre}  
+                            </p:column>
+                            <p:column id="centrosCant" headerText="Total" >  
+                                #{o.numero}  
+                            </p:column>
+
+                            <p:summaryRow listener="#{inscripcionesCentrosBean.calculateTotal(o.depto)}" >  
+                                <p:column colspan="3" style="text-align:right">  
+                                    Totales:  
+                                </p:column>  
+
+                                <p:column>  
+                                    #{inscripcionesCentrosBean.subTotalPrim} 
+                                </p:column> 
+
+                                <p:column>  
+                                    #{inscripcionesCentrosBean.subTotalRein}  
+                                </p:column>
+                                <p:column>
+                                    #{inscripcionesCentrosBean.subTotal}  
+                                </p:column>
+                            </p:summaryRow>
+
+
+                            <f:facet name="footer" >  
+                                Total de Alumnos Inscritos #{inscripcionesCentrosBean.total}   
+                            </f:facet> 
+                        </p:dataTable>
+                    </p:panel>        
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html> 

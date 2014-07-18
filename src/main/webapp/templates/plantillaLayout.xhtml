@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="es">
+
+    <f:view contentType="text/html">
+        <f:view class="xml">
+            <h:head>
+                <f:facet name="first">
+                    <meta charset="utf-8"/>
+                    <meta name ="description" content="Estadisticas UMG"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                    <title>Index Estadistica</title>
+                    <h:outputStylesheet  name="css/Style.css"  />
+                </f:facet>
+            </h:head>           
+            <h:body>
+
+                <header>
+                    <nav>
+                        <div class="container" style="background-image: url(../images/fondo4.png);">
+                            <div class="navbar">		
+                                <div class="logo">
+                                    <img class="logo1" src="../images/logomariano.png"/>
+                                </div>
+                                <div class="textocab">
+                                    <span>Universidad Mariano Gálvez</span>
+                                </div>	                             
+                            </div>
+                        </div>
+                    </nav>
+                </header>
+                <section id="arriba">
+                    <nav >
+                        <h:form>
+                            <section id="up">
+                                <section id="divtext">
+                                    <section id="text3">
+                                        <h2><h:outputLabel value="#{UsuariosBean.titulo}" /></h2>
+                                    </section>
+                                </section>
+                                <section id="divguardar">
+                                    <section id= "boton">
+                                        <p:commandButton id="dynaButton" type="button"  styleClass="botonuno"                       
+                                                         style=" background-size: 90% 90%; background-image: url('../resources/littlemenu2.png'); 
+                                                         background-repeat: no-repeat; "/>   
+                                        <p:menu model="#{UsuariosBean.model}"  trigger="dynaButton" overlay="true"  my="left top" at="left bottom"  style="opacity:0.8;
+                                                filter:alpha(opacity=70);background: rgb(66,66,66);"  /> 
+                                    </section>
+                                </section>
+                                <section id="divsalir">
+                                    <section id="link">
+                                        <a><h:outputLabel value="#{UsuariosBean.usuario}" /></a>
+                                    </section>
+                                </section>
+                                <section id="divusuario">
+                                    <section id="link2">
+                                        <a> <p:commandLink id="logout" 
+                                                           actionListener="#{UsuariosBean.logout()}"
+                                                           style=" color: rgb(255,255,255); text-decoration: none; font-family: Arial;"
+                                                           oncomplete="logout(xhr, status, args)">
+                                                <h:outputText value="Logout" />
+                                            </p:commandLink> </a>
+                                    </section> 
+                                </section>
+                            </section>
+                        </h:form>
+                    </nav>
+                </section>
+                <section id="contenedor">
+                    <p:layoutUnit position="center"  id="div_principal"  style=" border-style:none;">
+                        <ui:insert name="div_principal" id="div_principal" >
+                            Página en construcción
+                        </ui:insert>
+                    </p:layoutUnit>
+                    <div style="clear: both"></div>
+                </section>
+                <footer>
+
+                </footer>
+            </h:body>
+            <!--Impresion con qz-Print-->
+            <script type="text/javascript">
+                var qz;   // Our main applet
+                function findPrinter() {
+
+                    if (qz != null) {
+                        // Searches for locally installed printer with "zebra" in the name
+                        qz.findPrinter("Zebra");
+                    }
+
+                    // *Note:  monitorFinding() still works but is too complicated and
+                    // outdated.  Instead create a JavaScript  function called 
+                    // "jzebraDoneFinding()" and handle your next steps there.
+                    monitorFinding();
+                }
+
+                function findPrinters() {
+
+                    if (qz != null) {
+                        // Searches for locally installed printer with "zebra" in the name
+                        qz.findPrinter("\\{dummy printer name for listing\\}");
+                    }
+
+                    monitorFinding2();
+                }
+
+                function print() {
+
+                    if (qz != null) {
+                        // Send characters/raw commands to qz using "append"
+                        // This example is for EPL.  Please adapt to your printer language
+                        // Hint:  Carriage Return = \r, New Line = \n, Escape Double Quotes= \"
+                        qz.append("\nN\n");
+                        qz.append("q609\n");
+                        qz.append("Q203,26\n");
+                        qz.append("B5,26,0,1A,3,7,152,B,\"1234\"\n");
+                        qz.append("A310,26,0,3,1,1,N,\"SKU 00000 MFG 0000\"\n");
+                        qz.append("A310,56,0,3,1,1,N,\"QZ PRINT APPLET\"\n");
+                        qz.append("A310,86,0,3,1,1,N,\"TEST PRINT SUCCESSFUL\"\n");
+                        qz.append("A310,116,0,3,1,1,N,\"FROM SAMPLE.HTML\"\n");
+                        qz.append("A310,146,0,3,1,1,N,\"EDIT EPL_SAMPLE.TXT\"\n");
+                        qz.appendImage(getPath() + "img/image_sample_bw.png", "EPL", 150, 300);
+                        while (!qz.isDoneAppending()) {
+                        } //wait for image to download to java
+                        qz.append("\nP1,1\n");
+                        qz.print(); // send commands to printer
+                    }
+
+                    // *Note:  monitorPrinting() still works but is too complicated and
+                    // outdated.  Instead create a JavaScript  function called 
+                    // "jzebraDonePrinting()" and handle your next steps there.
+                    monitorPrinting();
+
+                    /**
+                     *  PHP PRINTING:
+                     *  // Uses the php `"echo"` function in conjunction with qz-print `"append"` function
+                     *  // This assumes you have already assigned a value to `"$commands"` with php
+                     *  qz.append(<?php echo $commands; ?>);
+                     */
+
+                    /**
+                     *  SPECIAL ASCII ENCODING
+                     *  //qz.setEncoding("UTF-8");
+                     *  qz.setEncoding("Cp1252"); 
+                     *  qz.append("\xDA");
+                     *  qz.append(String.fromCharCode(218));
+                     *  qz.append(chr(218));
+                     */
+
+                }
+
+                function printPDF() {
+
+                    if (qz != null) {
+                        qz.findPrinter("\\{dummy printer name for listing\\}");
+                        while (!qz.isDoneFinding()) {
+                            // Note, enless while loops are bad practice.
+                            // Create a JavaScript function called "jzebraDoneFinding()"
+                            // instead and handle your next steps there.
+                        }
+
+                        // Sample only: If a PDF printer isn't installed, try the Microsoft XPS Document
+                        // Writer.  Replace this with your printer name.
+                        var printers = qz.getPrinters().split(",");
+                        for (i in printers) {
+                            if (printers[i].indexOf("Microsoft XPS") != -1 ||
+                                    printers[i].indexOf("PDF") != -1) {
+                                qz.setPrinter(i);
+                            }
+                        }
+
+                        // No suitable printer found, exit
+                        if (qz.getPrinter() == null) {
+                            alert("Could not find a suitable printer for a PDF document");
+                            return;
+                        }
+
+                        // Append our pdf (only one pdf can be appended per print)
+                        qz.appendPDF(getPath() + "misc/pdf_sample.pdf");
+                    }
+
+                    // Very important for PDF, uses printPS() instead of print()
+                    // *Note:  monitorAppending2() still works but is too complicated and
+                    // outdated.  Instead create a JavaScript  function called 
+                    // "jzebraDoneAppending()" and handle your next steps there.
+                    monitorAppending2();
+                }
+
+                // Gets the current url's path, such as http://site.com/example/dist/
+                function getPath() {
+                    var path = window.location.href;
+                    return path.substring(0, path.lastIndexOf("/")) + "/";
+                }
+
+
+
+
+                function printToFile() {
+
+                    if (qz != null) {
+                        // Send characters/raw commands to qz using "append"
+                        // Hint:  Carriage Return = \r, New Line = \n, Escape Double Quotes= \"
+                        qz.append("A590,1600,2,3,1,1,N,\"QZ Print Plugin " + qz.getVersion() + " sample.html\"\n");
+                        qz.append("A590,1570,2,3,1,1,N,\"Testing the print() function\"\n");
+                        qz.append("P1\n");
+
+                        // Send characters/raw commands to file
+                        // Ex:  qz.printToFile("\\\\server\\printer");
+                        // Ex:  qz.printToFile("/home/user/test.txt");
+                        qz.printToFile("C:\\qz-print_test-print.txt");
+                    }
+
+                    // *Note:  monitorPrinting() still works but is too complicated and
+                    // outdated.  Instead create a JavaScript  function called 
+                    // "jzebraDonePrinting()" and handle your next steps there.
+                    monitorPrinting();
+                }
+
+                function printToHost() {
+
+                    if (qz != null) {
+                        // Send characters/raw commands to applet using "append"
+                        // Hint:  Carriage Return = \r, New Line = \n, Escape Double Quotes= \"
+                        qz.append("A590,1600,2,3,1,1,N,\"QZ Print Plugin " + qz.getVersion() + " sample.html\"\n");
+                        qz.append("A590,1570,2,3,1,1,N,\"Testing the print() function\"\n");
+                        qz.append("P1\n");
+
+                        // qz.printToHost(String hostName, int portNumber);
+                        // qz.printToHost("192.168.254.254");   // Defaults to 9100
+                        qz.printToHost("192.168.1.254", 9100);
+                    }
+
+                    // *Note:  monitorPrinting() still works but is too complicated and
+                    // outdated.  Instead create a JavaScript  function called 
+                    // "jzebraDonePrinting()" and handle your next steps there.
+                    monitorPrinting();
+                }
+
+                function chr(i) {
+                    return String.fromCharCode(i);
+                }
+
+                // *Note:  monitorPrinting() still works but is too complicated and
+                // outdated.  Instead create a JavaScript  function called 
+                // "jzebraDonePrinting()" and handle your next steps there.
+                function monitorPrinting() {
+
+                    if (qz != null) {
+                        if (!qz.isDonePrinting()) {
+                            window.setTimeout('monitorPrinting()', 100);
+                        } else {
+                            var e = qz.getException();
+                            alert(e == null ? "Printed Successfully" : "Exception occured: " + e.getLocalizedMessage());
+                            qz.clearException();
+                        }
+                    } else {
+                        alert("Applet not loaded!");
+                    }
+                }
+
+                function monitorFinding() {
+
+                    if (qz != null) {
+                        if (!qz.isDoneFinding()) {
+                            window.setTimeout('monitorFinding()', 100);
+                        } else {
+                            var printer = qz.getPrinter();
+                            alert(printer == null ? "Printer not found" : "Printer \"" + printer + "\" found");
+                        }
+                    } else {
+                        alert("Applet not loaded!");
+                    }
+                }
+
+                function monitorFinding2() {
+
+                    if (qz != null) {
+                        if (!qz.isDoneFinding()) {
+                            window.setTimeout('monitorFinding2()', 100);
+                        } else {
+                            var printersCSV = qz.getPrinters();
+                            var printers = printersCSV.split(",");
+                            for (p in printers) {
+                                alert(printers[p]);
+                            }
+
+                        }
+                    } else {
+                        alert("Applet not loaded!");
+                    }
+                }
+
+                // *Note:  monitorAppending() still works but is too complicated and
+                // outdated.  Instead create a JavaScript  function called 
+                // "jzebraDoneAppending()" and handle your next steps there.
+                function monitorAppending() {
+
+                    if (qz != null) {
+                        if (!qz.isDoneAppending()) {
+                            window.setTimeout('monitorAppending()', 100);
+                        } else {
+                            qz.print(); // Don't print until all of the data has been appended
+
+                            // *Note:  monitorPrinting() still works but is too complicated and
+                            // outdated.  Instead create a JavaScript  function called 
+                            // "jzebraDonePrinting()" and handle your next steps there.
+                            monitorPrinting();
+                        }
+                    } else {
+                        alert("Applet not loaded!");
+                    }
+                }
+
+                // *Note:  monitorAppending2() still works but is too complicated and
+                // outdated.  Instead create a JavaScript  function called 
+                // "jzebraDoneAppending()" and handle your next steps there.
+                function monitorAppending2() {
+
+                    if (qz != null) {
+                        if (!qz.isDoneAppending()) {
+                            window.setTimeout('monitorAppending2()', 100);
+                        } else {
+                            qz.printPS(); // Don't print until all of the image data has been appended
+
+                            // *Note:  monitorPrinting() still works but is too complicated and
+                            // outdated.  Instead create a JavaScript  function called 
+                            // "jzebraDonePrinting()" and handle your next steps there.
+                            monitorPrinting();
+                        }
+                    } else {
+                        alert("Applet not loaded!");
+                    }
+                }
+
+                // *Note:  monitorAppending3() still works but is too complicated and
+                // outdated.  Instead create a JavaScript  function called 
+                // "jzebraDoneAppending()" and handle your next steps there.
+                function monitorAppending3() {
+
+                    if (qz != null) {
+                        if (!qz.isDoneAppending()) {
+                            window.setTimeout('monitorAppending3()', 100);
+                        } else {
+                            qz.printHTML(); // Don't print until all of the image data has been appended
+
+
+                            // *Note:  monitorPrinting() still works but is too complicated and
+                            // outdated.  Instead create a JavaScript  function called 
+                            // "jzebraDonePrinting()" and handle your next steps there.
+                            monitorPrinting();
+                        }
+                    } else {
+                        alert("Applet not loaded!");
+                    }
+                }
+
+                function useDefaultPrinter() {
+
+                    if (qz != null) {
+                        // Searches for default printer
+                        qz.findPrinter();
+                    }
+
+                    monitorFinding();
+                }
+
+                function jzebraReady() {
+                    // Change title to reflect version
+                    qz = document.getElementById('qz');
+                    var title = document.getElementById("title");
+                    if (qz != null) {
+                        title.innerHTML = title.innerHTML + " " + qz.getVersion();
+                        document.getElementById("content").style.background = "#F0F0F0";
+                    }
+                }
+
+                function printdire(args) {
+                    var impdire = args.view;
+                    alert(impdire);
+                    var applet = qz;
+                    applet.findPrinter("dire");
+                    applet.append(impdire);
+                    applet.print();
+                    monitorPrinting();
+                }
+
+            </script>  
+            <script type="text/javascript">
+                function logout(xhr, status, args) {
+                    setTimeout(function() {
+                        window.location = 'Login.xhtml';
+                    }, 500);
+                }
+                //<![CDATA[
+                function ActualizaForm(form, status, args) {
+
+                    if (!args.validationFailed && args.Actualizado) {
+                        /*setTimeout(function() {
+                         window.location = args.view;
+                         }, 500);*/
+                        //document.formUser.submit();
+                        document.getElementById(form).submit();
+                    }
+                }
+                //]]> 
+
+
+            </script>
+
+        </f:view >
+    </f:view>
+</html>

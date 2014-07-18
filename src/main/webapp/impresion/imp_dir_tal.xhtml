@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="es">
+
+    <h:head>  
+
+    </h:head>  
+    <h:body>
+        <ui:composition template="/templates/plantillaLayout.xhtml">
+            <ui:define name="div_principal">
+                <applet id="qz" name="QZ Print Plugin" code="qz.PrintApplet.class" width="55" height="55">
+                    <param name="jnlp_href" value="qz-print_jnlp.jnlp"/>
+                    <param name="cache_option" value="plugin"/>
+                </applet>
+
+                <p:layoutUnit position="center" style="text-align: center;margin-left:50px;border-style:none" >
+
+                    <h:form prependId="false" id="formulario">
+                        <p:panel  style=" height:500px " header="Consulta de Alumnos" id="panelCntAlumnos" >
+                            <!--<p:focus context="panelCntAlumnos"/>-->
+                            <p:growl id="messages" showDetail="true" />
+                            <p:panelGrid id="gridCntAlumnos">
+                                <p:row>
+                                    <p:column >                                
+                                        <h:outputLabel id="lblCarnet"  value="Carnet:" />
+                                    </p:column >
+                                    <p:column >                                  
+                                        <p:inputText value="#{datAlumBean.facultad}" id="facultad" required="true" label="facultad" maxlength="4" size="8" accesskey="anio" requiredMessage="Ingrese la facultad" >
+                                            <f:validateLength minimum="1" />
+                                        </p:inputText>
+                                    </p:column> 
+                                    <p:column >
+                                        <p:inputText value="#{datAlumBean.anio}" id="anio" required="true" label="anio" maxlength="2" size="4" requiredMessage="Ingrese el anio">
+                                            <f:validateLength minimum="1" />
+                                        </p:inputText> 
+                                    </p:column>
+                                    <p:column style="text-align: left;width:1200px">
+                                        <p:inputText value="#{datAlumBean.carnet}" id="Carnet" required="true" label="carnet" maxlength="5" size="10" requiredMessage="Ingrese el Carnet">
+                                            <f:validateLength minimum="1" />
+                                        </p:inputText>
+                                    </p:column> 
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:commandButton value="Consulta"  id="ButtonEscta" action="#{datAlumBean.onDatAlum()}"   update="panelCntAlumnos">
+                                            <f:actionListener   binding="#{datAlumBean.onNomCarrera()}"/>
+
+                                        </p:commandButton> 
+                                    </p:column> 
+                                </p:row>
+                                <p:row>  
+                                    <p:column colspan="4" styleClass="ui-widget-header">  
+                                        <p:spacer height="0"/>  
+                                    </p:column>  
+                                </p:row>
+                            </p:panelGrid>
+                            <p:panelGrid id="gridDat" >
+                                <p:row>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel value="Carrera" />
+                                    </p:column> 
+                                    <p:column style="text-align:left;width:1200px" >
+                                        <p:outputLabel id="nomcARR" value="#{datAlumBean.nomcarrera}"/>
+
+                                    </p:column>   
+                                </p:row>
+                                <p:row>
+                                    <p:column style="text-align: left" >
+                                        <p:outputLabel value="Nombre      " />
+                                    </p:column>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel id="nomAlumn" value="#{datAlumBean.nombre}  " />                                   
+                                        <p:outputLabel id="apeAlumn" value="#{datAlumBean.apellido}" />    
+                                    </p:column> 
+                                </p:row>
+                                <p:row>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel value="Direccion" />
+                                    </p:column>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel id="dirResAlumn" value="#{datAlumBean.direccionRes}" />  
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel value="Dir_Ofi" />
+                                    </p:column>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel id="dirOfiAlumn" value="#{datAlumBean.direccionOf}" />  
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel value="Tel_Res" />
+                                    </p:column>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel id="telResAlumn" value="#{datAlumBean.telRes}" />  
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel value="Tel_Ofi" />
+                                    </p:column>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel id="telOfiAlumn" value="#{datAlumBean.telOf}" />  
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel value="Celular" />
+                                    </p:column>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel id="telCelAlumn" value="#{datAlumBean.telCel}" />  
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel value="Sexo" />
+                                    </p:column>
+                                    <p:column style="text-align: left">
+
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel value="Cedula" />
+                                    </p:column>
+                                    <p:column style="text-align: left">
+
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel value="Fecha_Nac" />
+                                    </p:column>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel id="fechaNacAlumn" value="#{datAlumBean.fecNac}" />  
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel value="Fecha_Ingre" />
+                                    </p:column>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel id="fechaIngreAlumn" value="#{datAlumBean.fecIngre}" />  
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="text-align: left">
+                                        <p:outputLabel value="Correo" />
+                                    </p:column>
+                                    <p:column style="text-align: left">
+
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>  
+                                    <p:column colspan="2" styleClass="ui-widget-header">  
+                                        <p:spacer height="0"/>  
+                                    </p:column>  
+                                </p:row>
+                            </p:panelGrid>
+                        </p:panel>
+
+                    </h:form>
+                    <h:form>
+                        <p:panel   id="panelImp"> 
+                            <p:commandButton value="Dire  "  id="ButtonDir" action="#{datAlumBean.onDir()}"  oncomplete="printdire(args)"  update="panelImp"/>
+                            <p:commandButton value="Talonario"  id="ButtonTal" action="#{datAlumBean.onTal()}"  oncomplete="Prueba(args)"  update="panelImp"/>
+
+                        </p:panel>           
+                    </h:form>
+                </p:layoutUnit>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html> 

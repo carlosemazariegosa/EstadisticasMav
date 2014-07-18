@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="es">
+
+    <h:head>  
+        <title>Facelet Title</title>  
+    </h:head>  
+    <h:body>  
+        <ui:composition template="/templates/plantillaLayout.xhtml">
+            <ui:define name="div_principal">
+                <h:form id="formUser">
+                    <p:panel   id="panelUserCarr" toggleable="true" style="width: 98%" >
+                        <p:focus context="panelUserCarr"/>
+                        <p:growl id="messages" showDetail="true" />
+                        <p:panelGrid >
+                            <p:row>
+                                <p:column>
+                                    <p:inputText value="#{userCarrBean.usuario}" id="usuario" required="true" label="usuario" maxlength="10" size="10" accesskey="Usuario" requiredMessage="Ingrese el Usuario">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                    <p:watermark for="usuario" value="Usuario" />
+                                </p:column>
+                                <p:column>
+                                    <p:column>
+                                        <p:commandButton value="Consulta"  id="BtnUserCarr" update="panelUserCarr"  >
+                                            <f:actionListener   binding="#{userCarrBean.onBuscaUsuario()}"/>
+                                        </p:commandButton>
+
+                                    </p:column>
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+                        <p:commandButton id="selectButtonFormProp" update=":formAgregaProp:displayFormProp" oncomplete="PF('DialogFormProp').show()"  icon="ui-icon-search" title="View" value="Agregar"  rendered="#{userCarrBean.muestraButton}">  
+                            <f:setPropertyActionListener value="#{prop}" target="#{userCarrBean.selectedUserCarrProp}" />  
+                        </p:commandButton> 
+                        <p:panelGrid>
+                            <p:row>
+                                <p:column style="vertical-align:top;width:50%">
+                                    <p:dataTable   id="TableUserCarrProp" var="prop" value="#{userCarrBean.listUserCarrProp}" paginator="false" rows="50" 
+                                                   paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} 
+                                                   {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="15,30" >
+                                        <f:facet name="header">  
+                                            <h:outputText value="Usuarios Carreras Propuestas" />
+                                        </f:facet>
+                                        <p:column headerText="Carrera" sortBy="#{prop.codcarr}" style="text-align:left;">  
+                                            <h:outputText value="#{prop.codcarr}" />  
+                                        </p:column>
+                                        <p:column headerText="Nombre" sortBy="#{prop.nombre}" style="text-align:left;" >  
+                                            <h:outputText value="#{prop.nombre}" />  
+                                        </p:column>
+                                        <!--<p:column style="width:4%" headerText="Agregar">  
+                                            <p:commandButton id="selectButtonForm" update=":formAgregaProp:displayFormProp" oncomplete="PF('DialogFormProp').show()"  icon="ui-icon-search" title="View" >  
+                                                <f:setPropertyActionListener value="#{prop}" target="#{userCarrBean.selectedUserCarrProp}" />  
+                                            </p:commandButton> 
+                                        </p:column>-->
+                                        <f:facet name="footer">  
+
+                                        </f:facet>  
+
+                                    </p:dataTable>
+
+                                </p:column>
+
+                                <p:column style="vertical-align:top;width:50%">
+                                    <p:dataTable   id="TableUserCarrHor" var="hor" value="#{userCarrBean.listUserCarrHor}" paginator="false" rows="50" 
+                                                   paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} 
+                                                   {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="15,30" >
+                                        <f:facet name="header">  
+                                            <h:outputText value="Usuarios Carreras Horarios" />
+                                        </f:facet>
+                                        <p:column headerText="Carrera" sortBy="#{hor.codcarr}" style="text-align:left;">  
+                                            <h:outputText value="#{hor.codcarr}" />  
+                                        </p:column>
+                                        <p:column headerText="Nombre" sortBy="#{hor.nombre}" style="text-align:left;" >  
+                                            <h:outputText value="#{hor.nombre}" />  
+                                        </p:column>            
+                                        <f:facet name="footer">  
+
+                                        </f:facet>  
+
+                                    </p:dataTable>
+
+                                </p:column>
+                            </p:row>
+                            <p:row>
+
+                            </p:row>
+
+                        </p:panelGrid>
+
+
+
+                    </p:panel>
+                </h:form>
+
+
+                <!--Dialog Insert-->
+                <p:dialog header="" widgetVar="DialogFormProp" resizable="false" id="carDlgForm"  
+                          showEffect="fade" hideEffect="explode" modal="true" appendTo="@(body)">
+
+                    <h:form id="formAgregaProp">
+                        <p:panel  style="width:700px; height:180px " header="Agregar Carreras a Propuestas" id="panelUserCarrPropInsert" >
+                            <p:growl id="messages" showDetail="true" />
+                            <h:panelGrid id="displayFormProp"  >
+                                <p:row>
+                                    <p:column>
+                                        <!--<h:outputText id="xxx" value="#{userCarrBean.idSisUsuario}" />-->
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="text-align:left;">
+                                        <p:inputText value="#{userCarrBean.facultad}"   id="Fnombre" required="true" requiredMessage="Ingrese el codigo de Carrera" maxlength="4" size="8"  >
+                                            <p:ajax event="blur" update="nomCarrIn" listener="#{userCarrBean.onNomCarrera()}" />
+                                        </p:inputText>
+                                    </p:column>
+                                    <p:column style="text-align:left;">
+                                        <h:outputText id="nomCarrIn" value="#{userCarrBean.nomCarrera}" />
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText value="Propuestas " />
+                                        <p:selectBooleanCheckbox value="#{userCarrBean.chkProp}" />
+                                    </p:column>
+                                    <p:column style="width:50px">
+                                        <h:outputText value=" " />
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="Horarios " />
+                                        <p:selectBooleanCheckbox value="#{userCarrBean.chkHor}" />
+                                    </p:column>   
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:commandButton id="BtnAgregarUserCarrProp" value="Agregar"  update="@form" ajax="true" actionListener="#{userCarrBean.onInsertCarrera()}" oncomplete="ActualizaForm('formUser', status, args)" >
+                                            <f:ajax execute="panelUserCarrPropInsert" render="panelUserCarrPropInsert"  />
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:row>
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:form>
+
+                </p:dialog>
+
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
+
+
+</html> 
