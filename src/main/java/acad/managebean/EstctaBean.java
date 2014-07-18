@@ -240,11 +240,14 @@ public class EstctaBean implements Serializable {
 
     public void onImprimeXXX() throws IOException, JRException {
 
-        JRBeanCollectionDataSource beancollectionDataSource = new JRBeanCollectionDataSource(listEstcta);
+        /*JRBeanCollectionDataSource beancollectionDataSource = new JRBeanCollectionDataSource(listEstcta);
         InputStream jasperReport = ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/reports/estcta.jasper");
         JasperPrint print = JasperFillManager.fillReport(jasperReport, new HashMap(), beancollectionDataSource);
         File pdf = File.createTempFile("output.", ".pdf");
-        JasperExportManager.exportReportToPdfStream(print, new FileOutputStream(pdf));
+        JasperExportManager.exportReportToPdfStream(print, new FileOutputStream(pdf));*/
+        System.out.println("esta es una nueva modificacion");
+        
+        
     }
 
     public List<EstctaModel> getEstctaModel() {
