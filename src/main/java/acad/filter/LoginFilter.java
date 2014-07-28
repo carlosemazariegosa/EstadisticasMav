@@ -11,6 +11,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -37,7 +38,6 @@ public class LoginFilter implements Filter, Serializable {
     // configured. 
     private FilterConfig filterConfig = null;
     private String urlStr = "";
-   
 
     public LoginFilter() {
     }
@@ -109,29 +109,45 @@ public class LoginFilter implements Filter, Serializable {
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        // Obtengo el bean que representa el usuario desde el scope sesi�n
-       
+
+        // Obtengo el bean que representa el usuario desde el scope sesión
         String loginBean = (String) req.getSession().getAttribute("usuario");
 
-        //Proceso la URL que est� requiriendo el cliente
+        //Proceso la URL que está requiriendo el cliente
         urlStr = req.getRequestURL().toString().toLowerCase();
-        UsuariosBean userTit = new UsuariosBean();
-        userTit.setTitulo(urlStr);
+
+        //Crea el objeto de UusariosBean
+        UsuariosBean userBean = new UsuariosBean();
+        userBean.setTitulo(urlStr);
 
         boolean noProteger = noProteger(urlStr);
-       // System.out.println(urlStr + " - desprotegido=[" + noProteger + "]");
 
-        //Si no requiere protecci�n contin�o normalmente.
+        //Si no requiere protección continúo normalmente.
         if (noProteger(urlStr)) {
             chain.doFilter(request, response);
             return;
         }
-        //UsuariosBean loginBean2 = (UsuariosBean) req.getSession().getAttribute("usuario");
-        UsuariosBean loginBean2 = new UsuariosBean();
-        //System.out.println("logueado "+loginBean2.getEstaLogeado());
 
-        if (loginBean == null || loginBean2.getEstaLogeado() == true) {
+        //Proceso para proteger paginas si no tiene permiso*/
+        boolean permiso = false;
+        String pagNav = urlStr.substring(urlStr.lastIndexOf("/") + 1);
+        List<Object[]> sisAccesos = userBean.getSisAccesos();
+        if (sisAccesos != null) {
+            for (Object[] result : sisAccesos) {
+                String pagMen = result[1].toString();
+                pagMen = pagMen + ".xhtml";
+                if (pagMen.matches(pagNav) || pagNav.matches("index.xhtml") || pagNav.matches("login.xhtml") || pagNav.matches("construccion.xhtml")) {
+                    permiso = true;
+                }
+            }
+        }
+        if (!permiso) {
+            res.sendRedirect("http://localhost:8080/MavEstadisticas/estadisticas/Login.xhtml");
+            return;
+        }
 
+        //Si esta logueado o No
+        if (loginBean == null || userBean.getEstaLogeado() == true) {
             res.sendRedirect("http://localhost:8080/MavEstadisticas/estadisticas/Login.xhtml");
             return;
 
@@ -140,27 +156,13 @@ public class LoginFilter implements Filter, Serializable {
 
     }
 
+    //paginas No protegidas
     private boolean noProteger(String urlStr) {
-
-        /*
-         * Este es un buen lugar para colocar y programar todos los patrones que
-         * creamos convenientes para determinar cuales de los recursos no
-         * requieren protecci�n. Sin duda que habr�a que crear un mecanizmo tal
-         * que se obtengan de un archivo de configuraci�n o algo que no requiera
-         * compilaci�n.
-         */
         if (urlStr.endsWith("login.xhtml")) {
-            return true;
-        }
-        if (urlStr.endsWith("cliente_rest.xhtml")) {
-            return true;
-        }
-        if (urlStr.endsWith("inscripciones.xhtml")) {
             return true;
         }
 
         if (urlStr.indexOf("/javax.faces.resource/") != -1) {
-
             return true;
         }
         return false;
@@ -271,4 +273,3 @@ public class LoginFilter implements Filter, Serializable {
     }
 
 }
-

@@ -34,7 +34,7 @@ public class SisUsuariosFacade extends AbstractFacade<SisUsuarios> implements Si
 
     @Override
     public boolean SisUsuariosLogin(String usuario, String contrasena) {
-        System.out.println("entro aqui");
+        
         contrasena = md5.encriptaEnMD5(contrasena.trim().toUpperCase());
         Query query = em.createQuery("select c.usuario,c.clave from SisUsuarios c where c.usuario=:usuario and c.clave=:clave");
         query.setParameter("usuario", usuario.toUpperCase().trim());

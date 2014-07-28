@@ -30,7 +30,7 @@ import session.SisUsuariosFacadeLocal;
 @Named(value = "UsuariosBean")
 public class UsuariosBean implements Serializable {
 
-    private static String usuario;
+    private  String usuario;
     private String contrasena;
     private boolean logeado = false;
     private static List<Object[]> SisAccesos;

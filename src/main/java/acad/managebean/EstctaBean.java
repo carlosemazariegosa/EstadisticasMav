@@ -8,11 +8,8 @@ import entity.AcadAlumnos;
 import entity.AcadCarreras;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,12 +20,6 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.HashPrintServiceAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.PrintServiceAttributeSet;
-import javax.print.attribute.standard.MediaSizeName;
-import javax.print.attribute.standard.PrinterName;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -36,23 +27,15 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.engine.export.JRPrintServiceExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
-import net.sf.jasperreports.export.OutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
-import net.sf.jasperreports.export.SimplePrintServiceExporterConfiguration;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import session.AcadAlumnosFacadeLocal;
@@ -138,7 +121,7 @@ public class EstctaBean implements Serializable {
         String xbase = client.target("http://localhost:8080/Rest3/webresources/entities.acadalumnos/factorial")
                 .queryParam("base", 10)
                 .request(MediaType.APPLICATION_JSON).get(String.class);
-        System.out.println(xbase);
+        
     }
 
     public void onEstcta() {
@@ -241,13 +224,12 @@ public class EstctaBean implements Serializable {
     public void onImprimeXXX() throws IOException, JRException {
 
         /*JRBeanCollectionDataSource beancollectionDataSource = new JRBeanCollectionDataSource(listEstcta);
-        InputStream jasperReport = ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/reports/estcta.jasper");
-        JasperPrint print = JasperFillManager.fillReport(jasperReport, new HashMap(), beancollectionDataSource);
-        File pdf = File.createTempFile("output.", ".pdf");
-        JasperExportManager.exportReportToPdfStream(print, new FileOutputStream(pdf));*/
-        System.out.println("esta es una nueva modificacionxxxxxxxxxxxx");
-        
-        
+         InputStream jasperReport = ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/reports/estcta.jasper");
+         JasperPrint print = JasperFillManager.fillReport(jasperReport, new HashMap(), beancollectionDataSource);
+         File pdf = File.createTempFile("output.", ".pdf");
+         JasperExportManager.exportReportToPdfStream(print, new FileOutputStream(pdf));*/
+       
+
     }
 
     public List<EstctaModel> getEstctaModel() {

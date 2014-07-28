@@ -25,10 +25,7 @@
 				</textElement>
 				<text><![CDATA[Estado de Cuenta]]></text>
 			</staticText>
-			<image>
-				<reportElement x="380" y="10" width="157" height="69" uuid="b05c3a0f-45d3-4bbe-bf60-2a302b8a28ef"/>
-				<imageExpression><![CDATA["C:\\Ajad-JEE\\EstadisticasUmg\\EstadisticasUmg-war\\web\\images\\logoumg.jpg"]]></imageExpression>
-			</image>
+			
 		</band>
 	</title>
 	<pageHeader>
